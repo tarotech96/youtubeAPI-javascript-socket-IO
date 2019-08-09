@@ -1,0 +1,42 @@
+@media only screen and (max-width: 768px) {
+    body {
+        width: 100%;
+    }
+
+    .navbar-inverse {
+        justify-items: center;
+    }
+
+}
+
+.youtube-API {
+    width: 100%;
+    text-align: center;
+}
+#jisoo {
+    margin: 10px;
+    font-size: 20px;
+    color: blueviolet
+}
+.btn-default {
+    position: relative;
+    left:-278px;
+}
+#processBar {
+    width: 45%;
+    height: 5px;
+    margin: auto;
+    margin-top: -20px;
+    margin-left: 340px;
+    background: blue;
+    cursor: pointer;
+}
+#square {
+    width: 15px;
+    height: 15px;
+    background: green;
+    position: relative;
+    top: -5px;
+    z-index: -1;
+    border: solid 1px black;
+}

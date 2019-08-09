@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/script.js"></script>
+    <script defer src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-inverse">
+            <a class="navbar-brand" href="#">Home</a>
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="#">Taro Oppa</a>
+                </li>
+                <li>
+                    <a href="#">Link</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="youtube-API">
+            <!-- <h3>Taro Oppa</h3>
+            <img src="/images/jisoo3.jpg" alt="jisoo" style="width: 500px; height: 500px;">
+            <p id="jisoo">Jisoo</p> -->
+            <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+            <div id="player"></div>
+            <div class="controls">
+                <button id="playVideo" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </button>
+                <button id="pauseVideo" type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div id="processBar">
+                <div id="square"></div>
+            </div>
+
+            <script>
+                function processBarLoop() {
+                    var processBar = $('#processBar');
+                    var square = $('#square');
+                    processBar.click((event) => {
+                        var lengthVideo = player.getDuration();
+                        var divOffset = $(processBar).offset();
+                        var data = (event.pageX - divOffset.left) / 550 * lengthVideo;
+                        socket.emit('event', { state: 'play', time: data });
+                    });
+                    setInterval(() => {
+                        if (player == null || processBar == null) {
+                            return null;
+                        } else {
+                            var fraction = player.getCurrentTime() / player.getDuration() * 100;
+                            square.css('left', fraction.toString() + '%');
+                        }
+                    }, 200)
+                }
+            </script>
+            <script>
+                // 2. This code loads the IFrame Player API code asynchronously.
+                var tag = document.createElement('script');
+
+                tag.src = "https://www.youtube.com/iframe_api";
+                var firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                // 3. This function creates an <iframe> (and YouTube player)
+                //    after the API code downloads.
+                var player;
+                var socket = io('http://localhost:5000/');
+                function onYouTubeIframeAPIReady() {
+                    player = new YT.Player('player', {
+                        height: '390',
+                        width: '640',
+                        videoId: 'YSqtv-3ijk8',
+                        events: {
+                            'onReady': onPlayerReady,
+                            'onStateChange': onPlayerStateChange
+                        }
+                    });
+                }
+                function playVideo() {
+                    player.playVideo();
+                }
+                function pauseVideo() {
+                    player.pauseVideo();
+                }
+                function seekTo(seconds) {
+                    player.seekTo(seconds);
+                }
+                function initializeButtons() {
+                    var playVideo = document.getElementById('playVideo');
+                    var pauseVideo = document.getElementById('pauseVideo');
+                    playVideo.addEventListener('click', () => {
+                        var data = player.getCurrentTime();
+                        socket.emit('event', { state: 'play', time: data });
+                    });
+                    pauseVideo.addEventListener('click', () => {
+                        var data = player.getCurrentTime();
+                        socket.emit('event', { state: 'pause', time: data });
+                    });
+                }
+                socket.on('event', (data) => {
+                    if (data.state == 'play') {
+                        if (Math.abs(data.time - player.getCurrentTime()) > 1) {
+                            seekTo(data.time);
+                        }
+                        playVideo();
+                    } else if (data.state == 'pause') {
+                        pauseVideo();
+                    }
+                })
+                // 4. The API will call this function when the video player is ready.
+                function onPlayerReady(event) {
+                    initializeButtons();
+                    processBarLoop();
+                }
+
+                // 5. The API calls this function when the player's state changes.
+                //    The function indicates that when playing a video (state=1),
+                //    the player should play for six seconds and then stop.
+                var done = false;
+                function onPlayerStateChange(event) {
+                    if (event.data == YT.PlayerState.PLAYING && !done) {
+                        setTimeout(stopVideo, 6000);
+                        done = true;
+                    }
+                }
+                function stopVideo() {
+                    player.stopVideo();
+                }
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>

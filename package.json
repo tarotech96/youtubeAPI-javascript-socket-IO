@@ -1,0 +1,25 @@
+{
+  "name": "youtube-api",
+  "version": "1.0.0",
+  "description": "build sample web app with using youtube api and javascript",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cong4696/youtubeAPI-javascript.git"
+  },
+  "author": "Taro Oppa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cong4696/youtubeAPI-javascript/issues"
+  },
+  "homepage": "https://github.com/Cong4696/youtubeAPI-javascript#readme",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1",
+    "socket.io": "^2.2.0"
+  }
+}
